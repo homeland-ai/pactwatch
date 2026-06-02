@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import {
   commissionReport,
   countries,
-  ecreSource,
   safeguardLabels,
   statusLabels,
   type CountryRecord,
@@ -112,7 +111,7 @@ function App() {
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = 'pactwatch-v1.csv'
+    link.download = 'pactwatch.csv'
     link.click()
     URL.revokeObjectURL(url)
   }
@@ -138,9 +137,6 @@ function App() {
         </div>
         <nav className="topbar-actions" aria-label="Utility navigation">
           <span>Updated 28 May 2026</span>
-          <a href={ecreSource} target="_blank" rel="noreferrer">
-            ECRE seed
-          </a>
           <a href={commissionReport} target="_blank" rel="noreferrer">
             Commission report
           </a>
@@ -155,10 +151,10 @@ function App() {
           <p className="eyebrow">EU Pact implementation monitor</p>
           <h1>National implementation, made legible.</h1>
           <p>
-            A public v1 observatory turning official laws, bills and government
+            A standalone observatory turning national laws, bills and government
             signals into comparable country intelligence for policymakers,
             institutions, journalists and migration specialists following Pact
-            implementation.
+            implementation across the EU.
           </p>
         </div>
         <div className="overview-panel" aria-label="Implementation summary">
@@ -178,6 +174,8 @@ function App() {
           </div>
         </div>
       </section>
+
+      <ImplementationAnalysis counts={counts} />
 
       <section className="workbench" aria-label="PactWatch country workbench">
         <div className="filter-strip">
@@ -233,6 +231,112 @@ function App() {
   )
 }
 
+function ImplementationAnalysis({
+  counts,
+}: {
+  counts: {
+    adopted: number
+    draft: number
+    unclear: number
+    highRisk: number
+    sourceGaps: number
+  }
+}) {
+  const advancedCountries = countries
+    .filter((country) => country.status === 'adopted')
+    .sort((a, b) => b.progress - a.progress)
+    .slice(0, 6)
+
+  const watchCountries = countries.filter(
+    (country) =>
+      country.status === 'unclear' ||
+      country.sourceType !== 'official national' ||
+      country.risk === 'high',
+  )
+
+  return (
+    <section className="analysis-panel" aria-label="Implementation analysis">
+      <div className="analysis-heading">
+        <p className="eyebrow">Implementation analysis</p>
+        <h2>Uneven legal readiness, with a narrow group already ahead.</h2>
+        <p>
+          PactWatch currently identifies {counts.adopted} Member States with most
+          relevant national legislation adopted, {counts.draft} still in a
+          drafting or adoption track, and {counts.unclear} where no definitive
+          public implementation status has been recovered.
+        </p>
+      </div>
+
+      <div className="analysis-grid">
+        <article>
+          <span>Advanced countries</span>
+          <h3>Adoption is concentrated in a small first wave.</h3>
+          <p>
+            Austria, the Netherlands, Estonia, Slovakia, Czechia and Ireland show
+            the clearest legislative progress. Germany, Cyprus and Lithuania are
+            also in the adopted group, but still need package-level or
+            article-level review before implementation quality can be compared.
+          </p>
+          <div className="country-chip-line">
+            {advancedCountries.map((country) => (
+              <CountryChip key={country.code} country={country} />
+            ))}
+          </div>
+        </article>
+
+        <article>
+          <span>Less advanced records</span>
+          <h3>The most exposed records are unclear or source-light.</h3>
+          <p>
+            Hungary, Malta, Poland and Slovenia remain unclear. Romania and Spain
+            still depend on regional references rather than recovered national
+            official sources, while Bulgaria, Greece and Italy require close
+            monitoring because they combine draft status with high review
+            priority.
+          </p>
+          <div className="country-chip-line">
+            {watchCountries.slice(0, 9).map((country) => (
+              <CountryChip key={country.code} country={country} />
+            ))}
+          </div>
+        </article>
+
+        <article>
+          <span>Implementation challenges</span>
+          <h3>The legal texts are only the first test.</h3>
+          <p>
+            The recurring challenges are final-text recovery, distinguishing
+            primary legislation from implementing rules, mapping institutional
+            responsibilities, and checking whether accelerated, border and
+            screening procedures include usable safeguards in practice.
+          </p>
+          <ul>
+            <li>Source gaps in {counts.sourceGaps} records need immediate follow-up.</li>
+            <li>Draft packages need monitoring through final parliamentary adoption.</li>
+            <li>Adopted packages still need article-level safeguard extraction.</li>
+          </ul>
+        </article>
+
+        <article>
+          <span>Emerging best practice</span>
+          <h3>The strongest signals are transparent and dated.</h3>
+          <p>
+            The most useful national sources publish dated parliamentary or
+            government records, identify the affected legal instruments, and make
+            the adoption stage clear. Those features make implementation easier
+            to scrutinise, compare and update as the Pact enters application.
+          </p>
+          <ul>
+            <li>Clear adoption or effective dates.</li>
+            <li>Direct links to bills, acts or parliamentary dossiers.</li>
+            <li>Traceable responsibilities across ministries and agencies.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  )
+}
+
 function Metric({
   label,
   value,
@@ -277,6 +381,15 @@ function CountryRow({
       <span className={`status-dot status-${country.status}`} />
       <span className={`risk risk-${country.risk}`}>{riskLabel[country.risk]}</span>
     </button>
+  )
+}
+
+function CountryChip({ country }: { country: CountryRecord }) {
+  return (
+    <span className="country-chip">
+      <FlagIcon country={country} size="small" />
+      {country.country}
+    </span>
   )
 }
 

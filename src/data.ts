@@ -21,15 +21,13 @@ export type CountryRecord = {
   sourceType: 'official national' | 'regional reference' | 'not recovered'
   verification: string
   implementationSafeguards: SafeguardState
-  sourceQuality: 'verified seed' | 'needs review' | 'gap'
+  sourceQuality: 'verified source' | 'needs review' | 'gap'
   progress: number
   summary: string
   watchpoints: string[]
   sources: SourceRecord[]
 }
 
-export const ecreSource =
-  'https://ecre.org/state-of-play-of-pact-implementation/'
 
 export const commissionReport =
   'https://home-affairs.ec.europa.eu/document/download/8a0aa873-859c-48b4-9f14-29674238393a_en?filename=Communication_State%20of%20play%20on%20the%20implementation%20of%20the%20Pact%20on%20Migration%20and%20Asylum.pdf'
@@ -46,12 +44,12 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'National Council adopts adaptation law',
     sourceUrl: 'https://www.parlament.gv.at/aktuelles/pk/jahr_2026/pk0440',
     sourceType: 'official national',
-    verification: 'Parliament source identified by ECRE seed list.',
+    verification: 'Parliament source identified in the implementation source review.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 84,
     summary:
-      'Austria is listed by ECRE among Member States that have adopted most relevant national legislation. The v1 record still needs document-level extraction for implementation safeguards.',
+      'Austria is in the adopted group, with implementation legislation identified through a national parliamentary source. Document-level extraction for implementation safeguards remains a monitoring priority.',
     watchpoints: ['screening procedure safeguards', 'border procedure exemptions', 'legal assistance'],
     sources: [
       {
@@ -73,7 +71,7 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://news.belgium.be/fr/mise-en-oeuvre-du-pacte-europeen-sur-la-migration-et-lasile-deuxieme-lecture-0',
     sourceType: 'official national',
-    verification: 'Government news source; final legal text not yet marked adopted in seed.',
+    verification: 'Government news source; final legal text has not yet been confirmed as adopted.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 58,
@@ -126,7 +124,7 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://vlada.gov.hr/zakon-o-medjunarodnoj-i-privremenoj-zastiti-pridonijet-ce-ucinkovitijem-sprjecavanju-sekundarnih-migracija/46131',
     sourceType: 'official national',
-    verification: 'Government source; seed places Croatia in drafting/adoption group.',
+    verification: 'Government source places Croatia in the drafting/adoption group.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 55,
@@ -180,16 +178,16 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://eur-lex.europa.eu/legal-content/CS/TXT/PDF/?uri=CELEX:72000L0043CZE_202505539',
     sourceType: 'official national',
-    verification: 'EU legal repository link cited by ECRE; canonical national source should be checked.',
+    verification: 'EU legal repository link identified; canonical national source should be checked.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 80,
     summary:
-      'Czechia is in the adopted group. The linked act amends asylum and foreigner residence legislation, but v1 does not yet classify implementation safeguards from the text.',
+      'Czechia is in the adopted group. The linked act amends asylum and foreigner residence legislation, but implementation safeguards still need to be classified from the text.',
     watchpoints: ['age assessment', 'appeal rights', 'legal counselling'],
     sources: [
       {
-        label: 'Legal text seed link',
+        label: 'Legal text reference',
         url: 'https://eur-lex.europa.eu/legal-content/CS/TXT/PDF/?uri=CELEX:72000L0043CZE_202505539',
         type: 'regional',
       },
@@ -206,7 +204,7 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'Proposal amending Aliens Act and Repatriation Act',
     sourceUrl: 'https://www.ft.dk/samling/20251/lovforslag/L95/index.htm',
     sourceType: 'official national',
-    verification: 'Parliamentary bill page; not classified as adopted in ECRE seed.',
+    verification: 'Parliamentary bill page; not yet classified as adopted.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 50,
@@ -260,7 +258,7 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://valtioneuvosto.fi/en/-/1410869/government-proposal-implementing-eu-pact-on-migration-and-asylum-submitted-to-parliament',
     sourceType: 'official national',
-    verification: 'Government source; parliamentary outcome not yet captured in seed.',
+    verification: 'Government source; parliamentary outcome still needs monitoring.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 60,
@@ -292,7 +290,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 52,
     summary:
-      'France has an official implementation communication, but the v1 record does not yet recover a final consolidated legal text.',
+      'France has an official implementation communication, but the observatory has not yet recovered a final consolidated legal text.',
     watchpoints: ['instrument list', 'vulnerability exemptions', 'rights information'],
     sources: [
       {
@@ -318,7 +316,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 78,
     summary:
-      'Germany is listed by ECRE among adopted states. Because implementation can span several acts, v1 flags it for package-level legal reconciliation.',
+      'Germany is in the adopted group. Because implementation can span several acts, the record is flagged for package-level legal reconciliation.',
     watchpoints: ['federal implementation split', 'detention safeguards', 'institutional responsibilities'],
     sources: [
       {
@@ -363,14 +361,14 @@ export const countries: CountryRecord[] = [
     risk: 'high',
     sourceTitle: 'No definitive public source recovered',
     sourceType: 'not recovered',
-    verification: 'ECRE states status was not specified and no definitive information was found.',
+    verification: 'No definitive official implementation status has been recovered.',
     implementationSafeguards: 'gap',
     sourceQuality: 'gap',
     progress: 16,
     summary:
-      'Hungary is a visible gap in the ECRE seed list. It should remain unclassified until an official national implementation source is recovered.',
+      'Hungary is a visible information gap. It should remain unclassified until an official national implementation source is recovered.',
     watchpoints: ['official implementation source', 'access to asylum procedure', 'implementation safeguards'],
-    sources: [{ label: 'ECRE state of play', url: ecreSource, type: 'secondary' }],
+    sources: [],
   },
   {
     code: 'IE',
@@ -388,7 +386,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 79,
     summary:
-      'Ireland is listed among adopted states after passage through the Houses of the Oireachtas. V1 keeps final text recovery as a review task.',
+      'Ireland is in the adopted group after passage through the Houses of the Oireachtas. Final text recovery remains a review task.',
     watchpoints: ['final act link', 'procedure safeguards', 'legal counselling'],
     sources: [
       {
@@ -436,7 +434,7 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://titania.saeima.lv/LIVS14/saeimalivs14.nsf/0/88686B78DF79ADB1C2258936002EF13C?OpenDocument',
     sourceType: 'official national',
-    verification: 'Parliamentary document page; not marked adopted in seed.',
+    verification: 'Parliamentary document page; not yet marked adopted.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 48,
@@ -507,14 +505,14 @@ export const countries: CountryRecord[] = [
     risk: 'high',
     sourceTitle: 'No definitive public source recovered',
     sourceType: 'not recovered',
-    verification: 'ECRE states status was not specified and no definitive information was found.',
+    verification: 'No definitive official implementation status has been recovered.',
     implementationSafeguards: 'gap',
     sourceQuality: 'gap',
     progress: 18,
     summary:
-      'Malta is a priority gap because implementation relevance is high and no definitive source was recovered in the seed.',
+      'Malta is a priority gap because implementation relevance is high and no definitive source has been recovered.',
     watchpoints: ['official source recovery', 'reception safeguards', 'border procedure guarantees'],
-    sources: [{ label: 'ECRE state of play', url: ecreSource, type: 'secondary' }],
+    sources: [],
   },
   {
     code: 'NL',
@@ -527,7 +525,7 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'Senate supports European asylum and migration pact',
     sourceUrl: 'https://www.eerstekamer.nl/nieuws/20260526/senaat_steunt_europees_asiel_en',
     sourceType: 'official national',
-    verification: 'Senate source; adopted group in ECRE seed.',
+    verification: 'Senate source; adopted group.',
     implementationSafeguards: 'partial',
     sourceQuality: 'needs review',
     progress: 83,
@@ -551,14 +549,14 @@ export const countries: CountryRecord[] = [
     risk: 'high',
     sourceTitle: 'No definitive public source recovered',
     sourceType: 'not recovered',
-    verification: 'ECRE states status was not specified and no definitive information was found.',
+    verification: 'No definitive official implementation status has been recovered.',
     implementationSafeguards: 'gap',
     sourceQuality: 'gap',
     progress: 20,
     summary:
-      'Poland is currently a gap record in the v1 database. It should not be promoted beyond unclear without an official national source.',
+      'Poland is currently a gap record. It should not be promoted beyond unclear without an official national source.',
     watchpoints: ['official source recovery', 'border context', 'implementation safeguards'],
-    sources: [{ label: 'ECRE state of play', url: ecreSource, type: 'secondary' }],
+    sources: [],
   },
   {
     code: 'PT',
@@ -572,7 +570,7 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://portugal.gov.pt/gc25/governo/comunicados-do-conselho-de-ministros/comunicado-do-conselho-de-ministros-de-7-de-maio-de-2026',
     sourceType: 'official national',
-    verification: 'Government statement; final legal text not recovered in seed.',
+    verification: 'Government statement; final legal text has not yet been recovered.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 52,
@@ -597,12 +595,12 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'See European Commission report',
     sourceUrl: commissionReport,
     sourceType: 'regional reference',
-    verification: 'ECRE links to EC report rather than a national official source.',
+    verification: 'Only a regional reference has been recovered so far; national official source recovery remains required.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 38,
     summary:
-      'Romania is in the drafting/adoption group but v1 has only a regional reference. National official source recovery is required before publication-grade analysis.',
+      'Romania is in the drafting/adoption group, but only a regional reference has been recovered so far. National official source recovery is required before publication-grade analysis.',
     watchpoints: ['national source recovery', 'draft text', 'vulnerability safeguards'],
     sources: [{ label: 'European Commission report', url: commissionReport, type: 'regional' }],
   },
@@ -618,12 +616,12 @@ export const countries: CountryRecord[] = [
     sourceUrl:
       'https://www.minv.sk/?tlacove-spravy-6&sprava=novy-zakon-o-medzinarodnej-ochrane-ucinny-od-12-juna-zrychli-konania',
     sourceType: 'official national',
-    verification: 'Interior ministry source; adopted group in ECRE seed.',
+    verification: 'Interior ministry source; adopted group.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 81,
     summary:
-      'Slovakia has an official source for a new international protection act effective from 12 June. V1 flags the implementation review as pending.',
+      'Slovakia has an official source for a new international protection act effective from 12 June. Detailed implementation review is pending.',
     watchpoints: ['accelerated procedures', 'vulnerability-sensitive process', 'appeal timelines'],
     sources: [
       {
@@ -642,14 +640,14 @@ export const countries: CountryRecord[] = [
     risk: 'high',
     sourceTitle: 'No definitive public source recovered',
     sourceType: 'not recovered',
-    verification: 'ECRE states status was not specified and no definitive information was found.',
+    verification: 'No definitive official implementation status has been recovered.',
     implementationSafeguards: 'gap',
     sourceQuality: 'gap',
     progress: 18,
     summary:
-      'Slovenia is an unresolved record in the seed. The app keeps the gap visible rather than inferring a status.',
+      'Slovenia is an unresolved record. The observatory keeps the gap visible rather than inferring a status.',
     watchpoints: ['official source recovery', 'implementation plan', 'implementation safeguards'],
-    sources: [{ label: 'ECRE state of play', url: ecreSource, type: 'secondary' }],
+    sources: [],
   },
   {
     code: 'ES',
@@ -661,12 +659,12 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'See European Commission report',
     sourceUrl: commissionReport,
     sourceType: 'regional reference',
-    verification: 'ECRE links to EC report rather than a national official source.',
+    verification: 'Only a regional reference has been recovered so far; national official source recovery remains required.',
     implementationSafeguards: 'review',
     sourceQuality: 'needs review',
     progress: 39,
     summary:
-      'Spain requires national source recovery. V1 records the Commission report as a placeholder reference, not a substitute for official national text.',
+      'Spain requires national source recovery. The Commission report is treated as a placeholder reference, not a substitute for official national text.',
     watchpoints: ['national source recovery', 'border procedure safeguards', 'reception safeguards'],
     sources: [{ label: 'European Commission report', url: commissionReport, type: 'regional' }],
   },
@@ -686,7 +684,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 57,
     summary:
-      'Sweden has a government proposition on adaptation to the Pact. V1 treats it as draft/adoption-stage pending final confirmation.',
+      'Sweden has a government proposition on adaptation to the Pact. The record treats it as draft/adoption-stage pending final confirmation.',
     watchpoints: ['parliamentary vote', 'permanent residence changes', 'vulnerability safeguards'],
     sources: [
       {
