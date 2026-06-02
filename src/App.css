@@ -1,7 +1,7 @@
 .app-shell {
   min-height: 100svh;
   background:
-    linear-gradient(180deg, rgba(231, 107, 95, 0.04), transparent 330px),
+    linear-gradient(180deg, rgba(231, 107, 95, 0.035), transparent 300px),
     var(--paper);
   color: var(--ink);
 }
@@ -13,9 +13,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding: 16px clamp(20px, 4vw, 56px);
-  background: rgba(255, 255, 255, 0.88);
+  gap: 20px;
+  min-height: 76px;
+  padding: 12px clamp(20px, 4vw, 56px);
+  background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(18px);
 }
@@ -23,7 +24,7 @@
 .brand-group {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -37,8 +38,8 @@
 
 .brand-mark {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   place-items: center;
   background: var(--ink);
   color: var(--paper);
@@ -50,7 +51,7 @@
 .brand strong {
   display: block;
   font-family: var(--display);
-  font-size: 27px;
+  font-size: 30px;
   line-height: 1;
 }
 
@@ -64,7 +65,7 @@
 }
 
 .brand-sub {
-  padding: 7px 9px;
+  padding: 5px 0 6px;
   border-bottom: 1px solid var(--coral);
   color: var(--soft-ink);
   font-weight: 750;
@@ -79,12 +80,12 @@
 .topbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .topbar-actions a,
 .topbar-actions button {
-  padding: 8px 11px;
+  padding: 9px 13px;
   border: 1px solid var(--line);
   background: var(--paper);
   text-decoration: none;
@@ -96,14 +97,16 @@
 
 .overview {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
-  gap: clamp(28px, 5vw, 76px);
-  padding: clamp(46px, 6vw, 82px) clamp(20px, 4vw, 56px) 22px;
-  align-items: end;
+  grid-template-columns: minmax(440px, 0.95fr) minmax(420px, 0.8fr);
+  gap: clamp(34px, 5vw, 84px);
+  min-height: clamp(470px, calc(100svh - 220px), 560px);
+  padding: clamp(34px, 4vw, 56px) clamp(20px, 4vw, 56px) clamp(28px, 4vw, 46px);
+  align-items: center;
 }
 
 .overview-copy {
-  max-width: 780px;
+  max-width: 760px;
+  min-width: 0;
 }
 
 .eyebrow {
@@ -116,45 +119,51 @@
 }
 
 .overview h1 {
-  max-width: 720px;
+  max-width: 700px;
   margin: 0;
   font-family: var(--display);
-  font-size: clamp(52px, 7vw, 98px);
+  font-size: clamp(44px, 4.55vw, 66px);
   font-weight: 700;
-  line-height: 0.93;
+  line-height: 1.03;
   letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.overview h1 span {
+  display: block;
 }
 
 .overview-copy > p:last-child {
-  max-width: 620px;
-  margin-top: 24px;
+  max-width: 660px;
+  margin-top: 22px;
   color: var(--soft-ink);
-  font-size: clamp(17px, 1.6vw, 21px);
-  line-height: 1.55;
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.62;
 }
 
 .overview-panel {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  min-width: 0;
   gap: 1px;
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--line);
-  box-shadow: 0 22px 70px rgba(8, 6, 13, 0.07);
+  box-shadow: 0 16px 44px rgba(8, 6, 13, 0.045);
 }
 
 .metric,
 .progress-story {
-  min-height: 118px;
-  padding: 20px;
-  background: var(--paper);
+  min-height: 112px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.88);
 }
 
 .metric strong {
   display: block;
   font-family: var(--display);
-  font-size: 44px;
-  line-height: 0.9;
+  font-size: 38px;
+  line-height: 1;
 }
 
 .metric-coral strong {
@@ -168,7 +177,7 @@
 .metric span,
 .progress-story span {
   display: block;
-  margin-top: 12px;
+  margin-top: 10px;
   color: var(--ink);
   font-size: 13px;
   font-weight: 800;
@@ -177,10 +186,10 @@
 .metric small,
 .progress-story small {
   display: block;
-  margin-top: 5px;
+  margin-top: 7px;
   color: var(--muted);
   font-size: 12px;
-  line-height: 1.35;
+  line-height: 1.42;
 }
 
 .progress-story {
@@ -191,8 +200,8 @@
 .progress-track {
   position: relative;
   display: flex;
-  height: 8px;
-  margin: 12px 0 8px;
+  height: 7px;
+  margin: 14px 0 10px;
   overflow: hidden;
   background: var(--wash);
 }
@@ -216,7 +225,7 @@
 }
 
 .analysis-panel {
-  padding: 34px clamp(20px, 4vw, 56px) 26px;
+  padding: 18px clamp(20px, 4vw, 56px) 32px;
 }
 
 .analysis-heading {
@@ -744,6 +753,11 @@ input:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .overview {
+    min-height: auto;
+    padding-top: 38px;
+  }
+
   .analysis-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -766,12 +780,24 @@ input:focus-visible {
   }
 
   .overview {
-    padding-top: 36px;
+    padding-top: 30px;
+  }
+
+  .overview-copy {
+    width: min(100%, 340px);
+    max-width: calc(100vw - 44px);
+  }
+
+  .overview-copy > p:last-child {
+    max-width: 330px;
   }
 
   .overview h1 {
-    font-size: clamp(40px, 11vw, 48px);
-    line-height: 0.96;
+    max-width: 340px;
+    font-size: clamp(30px, 7.8vw, 32px);
+    line-height: 1.08;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
   }
 
   .overview-copy > p:last-child {

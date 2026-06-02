@@ -149,7 +149,10 @@ function App() {
       <section className="overview" id="top">
         <div className="overview-copy">
           <p className="eyebrow">EU Pact implementation monitor</p>
-          <h1>Tracking national Pact implementation.</h1>
+          <h1>
+            <span>Tracking national</span>
+            <span>Pact implementation.</span>
+          </h1>
           <p>
             PactWatch tracks the national laws, bills and government decisions
             that determine how the EU Pact on Migration and Asylum is being put
