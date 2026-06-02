@@ -1,6 +1,6 @@
 # PactWatch
 
-PactWatch is a public observatory for national implementation of the EU Pact on Migration and Asylum. It turns national laws, bills, government signals and regional implementation reporting into a country-by-country policy dashboard.
+PactWatch tracks national implementation of the EU Pact on Migration and Asylum through laws, bills, government decisions and regional implementation reporting.
 
 ## Source Baseline
 

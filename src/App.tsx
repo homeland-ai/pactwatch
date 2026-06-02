@@ -149,12 +149,13 @@ function App() {
       <section className="overview" id="top">
         <div className="overview-copy">
           <p className="eyebrow">EU Pact implementation monitor</p>
-          <h1>National implementation, made legible.</h1>
+          <h1>Tracking national Pact implementation.</h1>
           <p>
-            A standalone observatory turning national laws, bills and government
-            signals into comparable country intelligence for policymakers,
-            institutions, journalists and migration specialists following Pact
-            implementation across the EU.
+            PactWatch tracks the national laws, bills and government decisions
+            that determine how the EU Pact on Migration and Asylum is being put
+            into effect. It is designed for policymakers, institutions,
+            researchers and practitioners who need a clear view of legal
+            readiness across Member States.
           </p>
         </div>
         <div className="overview-panel" aria-label="Implementation summary">
@@ -162,14 +163,14 @@ function App() {
           <Metric label="Draft / adopting" value={counts.draft} total={27} tone="coral" />
           <Metric label="Unclear" value={counts.unclear} total={27} tone="muted" />
           <div className="progress-story">
-            <span>Implementation pulse</span>
+            <span>Status snapshot</span>
             <div className="progress-track" aria-hidden="true">
               <i style={{ width: `${(counts.adopted / 27) * 100}%` }} />
               <b style={{ width: `${(counts.draft / 27) * 100}%` }} />
             </div>
             <small>
-              {counts.highRisk} high-priority records and {counts.sourceGaps} source
-              gaps need review.
+              {counts.highRisk} high-priority records and {counts.sourceGaps} records
+              still need stronger national-source coverage.
             </small>
           </div>
         </div>
@@ -258,24 +259,24 @@ function ImplementationAnalysis({
     <section className="analysis-panel" aria-label="Implementation analysis">
       <div className="analysis-heading">
         <p className="eyebrow">Implementation analysis</p>
-        <h2>Uneven legal readiness, with a narrow group already ahead.</h2>
+        <h2>Legal readiness remains uneven across Member States.</h2>
         <p>
-          PactWatch currently identifies {counts.adopted} Member States with most
-          relevant national legislation adopted, {counts.draft} still in a
-          drafting or adoption track, and {counts.unclear} where no definitive
+          PactWatch currently records {counts.adopted} Member States as having
+          adopted most relevant national legislation, {counts.draft} still moving
+          through drafting or adoption, and {counts.unclear} where no definitive
           public implementation status has been recovered.
         </p>
       </div>
 
       <div className="analysis-grid">
         <article>
-          <span>Advanced countries</span>
-          <h3>Adoption is concentrated in a small first wave.</h3>
+          <span>Further advanced</span>
+          <h3>A small group has moved ahead on adoption.</h3>
           <p>
             Austria, the Netherlands, Estonia, Slovakia, Czechia and Ireland show
             the clearest legislative progress. Germany, Cyprus and Lithuania are
-            also in the adopted group, but still need package-level or
-            article-level review before implementation quality can be compared.
+            also in the adopted group, but still need closer review before the
+            quality of implementation can be compared.
           </p>
           <div className="country-chip-line">
             {advancedCountries.map((country) => (
@@ -285,14 +286,14 @@ function ImplementationAnalysis({
         </article>
 
         <article>
-          <span>Less advanced records</span>
-          <h3>The most exposed records are unclear or source-light.</h3>
+          <span>Less advanced</span>
+          <h3>Several files remain unclear or thinly sourced.</h3>
           <p>
             Hungary, Malta, Poland and Slovenia remain unclear. Romania and Spain
-            still depend on regional references rather than recovered national
-            official sources, while Bulgaria, Greece and Italy require close
-            monitoring because they combine draft status with high review
-            priority.
+            still rely on regional references pending recovery of national
+            official sources. Bulgaria, Greece and Italy warrant close monitoring
+            because they remain in draft or adoption processes and are high
+            review-priority records.
           </p>
           <div className="country-chip-line">
             {watchCountries.slice(0, 9).map((country) => (
@@ -303,12 +304,12 @@ function ImplementationAnalysis({
 
         <article>
           <span>Implementation challenges</span>
-          <h3>The legal texts are only the first test.</h3>
+          <h3>Adoption does not settle implementation quality.</h3>
           <p>
-            The recurring challenges are final-text recovery, distinguishing
-            primary legislation from implementing rules, mapping institutional
+            The recurring issues are final-text recovery, distinguishing primary
+            legislation from implementing rules, mapping institutional
             responsibilities, and checking whether accelerated, border and
-            screening procedures include usable safeguards in practice.
+            screening procedures include safeguards that can work in practice.
           </p>
           <ul>
             <li>Source gaps in {counts.sourceGaps} records need immediate follow-up.</li>
@@ -318,13 +319,13 @@ function ImplementationAnalysis({
         </article>
 
         <article>
-          <span>Emerging best practice</span>
-          <h3>The strongest signals are transparent and dated.</h3>
+          <span>Clearer models</span>
+          <h3>The most useful records are transparent and dated.</h3>
           <p>
             The most useful national sources publish dated parliamentary or
             government records, identify the affected legal instruments, and make
             the adoption stage clear. Those features make implementation easier
-            to scrutinise, compare and update as the Pact enters application.
+            to check, compare and update.
           </p>
           <ul>
             <li>Clear adoption or effective dates.</li>
@@ -414,17 +415,17 @@ function CountryBrief({ country }: { country: CountryRecord }) {
 
       <div className="brief-progress">
         <div>
-          <span>PactWatch signal</span>
+          <span>Review score</span>
           <strong>{country.progress}%</strong>
         </div>
         <div className="progress-track large" aria-hidden="true">
           <i style={{ width: `${country.progress}%` }} />
         </div>
-        <small>Indicative score derived from status, source quality and review priority.</small>
+        <small>Indicative score based on status, source coverage and review priority.</small>
       </div>
 
       <section className="brief-section">
-        <h3>AI-ready summary</h3>
+        <h3>Country note</h3>
         <p>{country.summary}</p>
       </section>
 

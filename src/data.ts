@@ -49,7 +49,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 84,
     summary:
-      'Austria is in the adopted group, with implementation legislation identified through a national parliamentary source. Document-level extraction for implementation safeguards remains a monitoring priority.',
+      'Austria is in the adopted group, with implementation legislation identified through a national parliamentary source. Document-level review for implementation safeguards remains a monitoring priority.',
     watchpoints: ['screening procedure safeguards', 'border procedure exemptions', 'legal assistance'],
     sources: [
       {
@@ -76,7 +76,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 58,
     summary:
-      'Belgium is still in the drafting or adoption track. The next useful analysis is whether the second-reading package carries enforceable implementation safeguards.',
+      'Belgium is still in the drafting or adoption track. The next review question is whether the second-reading package carries enforceable implementation safeguards.',
     watchpoints: ['draft-to-final changes', 'institutional responsibility references', 'reception guarantees'],
     sources: [
       {
@@ -129,7 +129,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 55,
     summary:
-      'Croatia has an official government signal on amendments to international and temporary protection law. Full analysis depends on extracting the underlying legal text.',
+      'Croatia has an official government signal on amendments to international and temporary protection law. Further analysis depends on extracting the underlying legal text.',
     watchpoints: ['secondary movement framing', 'vulnerability screening', 'family unity'],
     sources: [
       {
@@ -156,7 +156,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 76,
     summary:
-      'Cyprus is listed as having adopted most relevant legislation. Given the protection context, the priority is to verify safeguards for vulnerable applicants.',
+      'Cyprus is listed as having adopted most relevant legislation. The next review step is to verify safeguards for vulnerable applicants.',
     watchpoints: ['reception capacity', 'vulnerable applicants', 'border procedure safeguards'],
     sources: [
       {
@@ -236,7 +236,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 82,
     summary:
-      'Estonia is in the adopted group after the Riigikogu passed implementation legislation. The next review step is article-level safeguard classification.',
+      'Estonia is in the adopted group after the Riigikogu passed implementation legislation. The next review step is article-level review of safeguards.',
     watchpoints: ['vulnerability assessment', 'rights information', 'appeals'],
     sources: [
       {
@@ -263,7 +263,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 60,
     summary:
-      'Finland has submitted a government proposal to Parliament. It is a strong candidate for near-term update monitoring.',
+      'Finland has submitted a government proposal to Parliament. It should be monitored for near-term parliamentary updates.',
     watchpoints: ['parliamentary amendments', 'legal aid', 'border procedure safeguards'],
     sources: [
       {
@@ -290,7 +290,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 52,
     summary:
-      'France has an official implementation communication, but the observatory has not yet recovered a final consolidated legal text.',
+      'France has an official implementation communication, but PactWatch has not yet recovered a final consolidated legal text.',
     watchpoints: ['instrument list', 'vulnerability exemptions', 'rights information'],
     sources: [
       {
@@ -337,7 +337,7 @@ export const countries: CountryRecord[] = [
     sourceTitle: 'Implementation of the Pact on Immigration and Asylum',
     sourceUrl: 'https://www.opengov.gr/immigration/?p=2176',
     sourceType: 'official national',
-    verification: 'Official consultation page; high-priority review signal due to border procedure relevance.',
+    verification: 'Official consultation page; high-priority record due to border procedure relevance.',
     implementationSafeguards: 'partial',
     sourceQuality: 'needs review',
     progress: 46,
@@ -412,7 +412,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 49,
     summary:
-      'Italy has a parliamentary dossier in the draft/adoption group. The public product should prioritize implementation analysis once the final legal text is available.',
+      'Italy has a parliamentary dossier in the draft/adoption group. Implementation analysis should be updated once the final legal text is available.',
     watchpoints: ['accelerated procedures', 'detention and alternatives', 'institutional responsibilities'],
     sources: [
       {
@@ -492,7 +492,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 44,
     summary:
-      'Luxembourg has a parliamentary draft dossier. Document extraction can identify whether implementation safeguards are explicit or delegated.',
+      'Luxembourg has a parliamentary draft dossier. Document review can identify whether implementation safeguards are explicit or delegated.',
     watchpoints: ['committee progress', 'explicit vulnerability safeguards', 'legal assistance'],
     sources: [{ label: 'Chamber dossier', url: 'https://www.chd.lu/en/dossier/8684', type: 'official' }],
   },
@@ -510,7 +510,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'gap',
     progress: 18,
     summary:
-      'Malta is a priority gap because implementation relevance is high and no definitive source has been recovered.',
+      'Malta is a high-priority gap because implementation relevance is high and no definitive source has been recovered.',
     watchpoints: ['official source recovery', 'reception safeguards', 'border procedure guarantees'],
     sources: [],
   },
@@ -530,7 +530,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 83,
     summary:
-      'The Netherlands is in the adopted group after Senate support. Safeguard analysis should check whether vulnerability-sensitive guarantees are in primary or secondary rules.',
+      'The Netherlands is in the adopted group after Senate support. Further review should check whether vulnerability-sensitive guarantees are in primary or secondary rules.',
     watchpoints: ['secondary legislation', 'legal counselling', 'vulnerability checks'],
     sources: [
       {
@@ -600,7 +600,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'needs review',
     progress: 38,
     summary:
-      'Romania is in the drafting/adoption group, but only a regional reference has been recovered so far. National official source recovery is required before publication-grade analysis.',
+      'Romania is in the drafting/adoption group, but only a regional reference has been recovered so far. National official source recovery is required before a firmer public assessment.',
     watchpoints: ['national source recovery', 'draft text', 'vulnerability safeguards'],
     sources: [{ label: 'European Commission report', url: commissionReport, type: 'regional' }],
   },
@@ -645,7 +645,7 @@ export const countries: CountryRecord[] = [
     sourceQuality: 'gap',
     progress: 18,
     summary:
-      'Slovenia is an unresolved record. The observatory keeps the gap visible rather than inferring a status.',
+      'Slovenia is an unresolved record. PactWatch keeps the gap visible rather than inferring a status.',
     watchpoints: ['official source recovery', 'implementation plan', 'implementation safeguards'],
     sources: [],
   },
