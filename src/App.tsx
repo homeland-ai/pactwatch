@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   applicationDate,
   asOf,
@@ -14,7 +14,6 @@ import {
   type CountryRecord,
   type ImplementationStatus,
   type RiskLevel,
-  type SafeguardState,
 } from './data'
 import './App.css'
 
@@ -47,12 +46,11 @@ const adoptionColumns: { key: ImplementationStatus; label: string }[] = [
   { key: 'unclear', label: 'Unclear' },
 ]
 
-const safeguardRows: { key: SafeguardState; label: string }[] = [
-  { key: 'present', label: 'Safeguards identified' },
-  { key: 'partial', label: 'Partial signals' },
-  { key: 'gap', label: 'Visible gap' },
-  { key: 'review', label: 'Not yet assessed' },
-]
+const sourceTypeLabels: Record<CountryRecord['sourceType'], string> = {
+  'official national': 'Official national',
+  'regional reference': 'Regional reference',
+  'not recovered': 'Not recovered',
+}
 
 const countryByCode = new Map(countries.map((country) => [country.code, country]))
 const DAY_MS = 24 * 60 * 60 * 1000
@@ -139,7 +137,6 @@ function App() {
       unclear: countries.filter((country) => country.status === 'unclear').length,
       highRisk: countries.filter((country) => country.risk === 'high').length,
       sourceGaps: countries.filter((country) => country.sourceType !== 'official national').length,
-      assessed: countries.filter((country) => country.implementationSafeguards !== 'review').length,
     }),
     [],
   )
@@ -327,7 +324,6 @@ function ImplementationAnalysis({
     unclear: number
     highRisk: number
     sourceGaps: number
-    assessed: number
   }
   onSelect: (code: string) => void
 }) {
@@ -335,65 +331,51 @@ function ImplementationAnalysis({
     <section className="analysis-panel" aria-label="Implementation analysis">
       <div className="analysis-heading">
         <p className="eyebrow">Implementation analysis</p>
-        <h2>Adoption is moving — safeguard quality is mostly unverified.</h2>
+        <h2>Adoption is advancing at very different speeds.</h2>
         <p>
           PactWatch records {counts.adopted} Member States as having adopted most
           relevant national legislation, {counts.draft} still drafting or adopting,
-          and {counts.unclear} with no definitive public status recovered. The two
-          questions are tracked separately: how far adoption has progressed, and
-          whether implementation safeguards hold up.
+          and {counts.unclear} with no definitive public status recovered. Every
+          record links back to the national source it is based on.
         </p>
       </div>
 
-      <div className="readiness" role="table" aria-label="Adoption by safeguard signal">
-        <div className="readiness-corner" role="columnheader">
-          <span>Adoption →</span>
-          <span>Safeguard signal ↓</span>
-        </div>
-        {adoptionColumns.map((column) => (
-          <div className="readiness-colhead" role="columnheader" key={column.key}>
-            {column.label}
-            <i>{countries.filter((country) => country.status === column.key).length}</i>
-          </div>
-        ))}
-
-        {safeguardRows.map((row) => (
-          <Fragment key={row.key}>
-            <div className={`readiness-rowhead sig-${row.key}`} role="rowheader">
-              {row.label}
+      <div className="adoption-board" aria-label="Adoption by stage">
+        {adoptionColumns.map((column) => {
+          const group = countries.filter((country) => country.status === column.key)
+          return (
+            <div className="adoption-col" key={column.key}>
+              <div className="adoption-colhead">
+                <span className={`status-dot status-${column.key}`} />
+                {column.label}
+                <i>{group.length}</i>
+              </div>
+              <div className="adoption-flags">
+                {group.map((country) => (
+                  <button
+                    type="button"
+                    key={country.code}
+                    className="board-flag"
+                    title={country.country}
+                    onClick={() => onSelect(country.code)}
+                  >
+                    <FlagIcon country={country} size="small" />
+                  </button>
+                ))}
+              </div>
             </div>
-            {adoptionColumns.map((column) => {
-              const cell = countries.filter(
-                (country) =>
-                  country.status === column.key &&
-                  country.implementationSafeguards === row.key,
-              )
-              return (
-                <div className="readiness-cell" role="cell" key={column.key}>
-                  {cell.map((country) => (
-                    <button
-                      type="button"
-                      key={country.code}
-                      className="readiness-flag"
-                      title={`${country.country} — ${row.label}`}
-                      onClick={() => onSelect(country.code)}
-                    >
-                      <FlagIcon country={country} size="small" />
-                    </button>
-                  ))}
-                </div>
-              )
-            })}
-          </Fragment>
-        ))}
+          )
+        })}
       </div>
 
       <p className="analysis-note">
-        Safeguard quality is assessed for only {counts.assessed} of 27 records so
-        far — most adopted and drafting files sit in “not yet assessed”.{' '}
-        {counts.sourceGaps} records rest on a regional reference or have no
-        recovered national source. Confidence below is derived from provenance,
-        independent of adoption stage.
+        PactWatch tracks how far adoption has progressed and how well each record
+        is sourced. It does not score the quality of safeguards inside each law —
+        many safeguards sit in implementing rules, guidance or practice that public
+        sources do not specify, and their absence here does not mean they are
+        missing. The per-country notes flag what to check, not what is lacking.{' '}
+        {counts.sourceGaps} records currently rest on a regional reference or have
+        no recovered national source.
       </p>
     </section>
   )
@@ -518,8 +500,8 @@ function CountryBrief({ country }: { country: CountryRecord }) {
             <strong>{statusLabels[country.status]}</strong>
           </div>
           <div>
-            <span>Safeguard signal</span>
-            <strong>{safeguardLabels[country.implementationSafeguards]}</strong>
+            <span>Source</span>
+            <strong>{sourceTypeLabels[country.sourceType]}</strong>
           </div>
           <div>
             <span>Confidence</span>
@@ -566,10 +548,11 @@ function CountryBrief({ country }: { country: CountryRecord }) {
       </section>
 
       <section className="brief-section">
-        <h3>Safeguards and implementation watchpoints</h3>
-        <div className={`safeguard safeguard-${country.implementationSafeguards}`}>
-          {safeguardLabels[country.implementationSafeguards]}
-        </div>
+        <h3>Watchpoints to monitor</h3>
+        <p className="watchpoints-note">
+          Open questions for follow-up — not findings that these safeguards are
+          absent.
+        </p>
         <ul className="watchpoints">
           {country.watchpoints.map((item) => (
             <li key={item}>{item}</li>

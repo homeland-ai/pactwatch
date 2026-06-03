@@ -1085,6 +1085,13 @@
   color: var(--green);
 }
 
+.brief-section .watchpoints-note {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
 .watchpoints {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1249,7 +1256,7 @@ input:focus-visible {
 }
 
 /* ----------------------------------------------------------------------------
-   Phase 1 — countdown, activity, readiness grid, confidence
+   Phase 1 — countdown, activity, adoption board, confidence
 ---------------------------------------------------------------------------- */
 .countdown-figure {
   display: flex;
@@ -1377,10 +1384,10 @@ input:focus-visible {
   color: var(--amber);
 }
 
-/* Readiness grid */
-.readiness {
+/* Adoption board */
+.adoption-board {
   display: grid;
-  grid-template-columns: minmax(150px, 0.7fr) repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1389,76 +1396,42 @@ input:focus-visible {
   box-shadow: var(--shadow-md);
 }
 
-.readiness > div {
+.adoption-col {
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.92);
 }
 
-.readiness-corner {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 14px 16px;
-  background: var(--wash);
-}
-
-.readiness-corner span {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.03em;
-}
-
-.readiness-colhead {
+.adoption-colhead {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 9px;
   padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
   background: var(--wash);
   font-size: 13px;
   font-weight: 850;
 }
 
-.readiness-colhead i {
+.adoption-colhead i {
+  margin-left: auto;
   font-style: normal;
   font-family: var(--display);
-  font-size: 20px;
+  font-size: 22px;
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 
-.readiness-rowhead {
-  display: flex;
-  align-items: center;
-  padding: 14px 16px;
-  font-size: 12px;
-  font-weight: 850;
-}
-
-.sig-present {
-  color: var(--green);
-}
-.sig-partial {
-  color: var(--amber);
-}
-.sig-gap {
-  color: var(--red);
-}
-.sig-review {
-  color: var(--muted);
-}
-
-.readiness-cell {
+.adoption-flags {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 6px;
-  padding: 14px 16px;
-  min-height: 58px;
+  gap: 7px;
+  padding: 16px;
+  min-height: 64px;
 }
 
-.readiness-flag {
+.board-flag {
   display: inline-flex;
   padding: 0;
   border: 0;
@@ -1466,7 +1439,7 @@ input:focus-visible {
   transition: transform 0.25s var(--ease);
 }
 
-.readiness-flag:hover {
+.board-flag:hover {
   transform: translateY(-2px) scale(1.08);
 }
 
@@ -1551,15 +1524,12 @@ input:focus-visible {
 }
 
 @media (max-width: 760px) {
-  .readiness {
-    grid-template-columns: 104px repeat(3, minmax(0, 1fr));
+  .adoption-board {
+    grid-template-columns: 1fr;
   }
 
-  .readiness-corner,
-  .readiness-colhead,
-  .readiness-rowhead,
-  .readiness-cell {
-    padding: 11px 10px;
+  .adoption-flags {
+    min-height: auto;
   }
 
   .readout-grid {
