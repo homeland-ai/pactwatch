@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   commissionReport,
   countries,
@@ -31,6 +31,30 @@ const riskLabel: Record<RiskLevel, string> = {
   low: 'Low',
   medium: 'Medium',
   high: 'High',
+}
+
+const prefersReducedMotion =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+function useCountUp(target: number, duration = 1100) {
+  const [value, setValue] = useState(prefersReducedMotion ? target : 0)
+
+  useEffect(() => {
+    if (prefersReducedMotion) return
+    let frame = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setValue(Math.round(target * eased))
+      if (progress < 1) frame = requestAnimationFrame(tick)
+    }
+    frame = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(frame)
+  }, [target, duration])
+
+  return value
 }
 
 function App() {
@@ -136,7 +160,10 @@ function App() {
           </a>
         </div>
         <nav className="topbar-actions" aria-label="Utility navigation">
-          <span>Updated 28 May 2026</span>
+          <span>
+            <i className="live-dot" aria-hidden="true" />
+            Updated 28 May 2026
+          </span>
           <a href={commissionReport} target="_blank" rel="noreferrer">
             Commission report
           </a>
@@ -352,9 +379,10 @@ function Metric({
   total: number
   tone: 'dark' | 'coral' | 'muted'
 }) {
+  const animated = useCountUp(value)
   return (
     <div className={`metric metric-${tone}`}>
-      <strong>{value}</strong>
+      <strong>{animated}</strong>
       <span>{label}</span>
       <small>{Math.round((value / total) * 100)}% of EU Member States</small>
     </div>
