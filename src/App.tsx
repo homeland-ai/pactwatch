@@ -1,12 +1,20 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import {
+  applicationDate,
+  asOf,
+  changeKindLabels,
+  changelog,
   commissionReport,
+  confidenceLabels,
+  confidenceOf,
   countries,
   safeguardLabels,
+  sourceBaseline,
   statusLabels,
   type CountryRecord,
   type ImplementationStatus,
   type RiskLevel,
+  type SafeguardState,
 } from './data'
 import './App.css'
 
@@ -31,6 +39,41 @@ const riskLabel: Record<RiskLevel, string> = {
   low: 'Low',
   medium: 'Medium',
   high: 'High',
+}
+
+const adoptionColumns: { key: ImplementationStatus; label: string }[] = [
+  { key: 'adopted', label: 'Adopted' },
+  { key: 'draft', label: 'Draft / adopting' },
+  { key: 'unclear', label: 'Unclear' },
+]
+
+const safeguardRows: { key: SafeguardState; label: string }[] = [
+  { key: 'present', label: 'Safeguards identified' },
+  { key: 'partial', label: 'Partial signals' },
+  { key: 'gap', label: 'Visible gap' },
+  { key: 'review', label: 'Not yet assessed' },
+]
+
+const countryByCode = new Map(countries.map((country) => [country.code, country]))
+const DAY_MS = 24 * 60 * 60 * 1000
+const asOfTime = new Date(asOf).getTime()
+
+const daysToApplication = Math.max(
+  0,
+  Math.ceil((new Date(applicationDate).getTime() - asOfTime) / DAY_MS),
+)
+
+const recentChanges = changelog.filter(
+  (event) => asOfTime - new Date(event.date).getTime() <= 30 * DAY_MS,
+)
+const recentlyUpdatedCodes = new Set(recentChanges.map((event) => event.code))
+
+function formatIsoDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
 }
 
 const prefersReducedMotion =
@@ -96,6 +139,7 @@ function App() {
       unclear: countries.filter((country) => country.status === 'unclear').length,
       highRisk: countries.filter((country) => country.risk === 'high').length,
       sourceGaps: countries.filter((country) => country.sourceType !== 'official national').length,
+      assessed: countries.filter((country) => country.implementationSafeguards !== 'review').length,
     }),
     [],
   )
@@ -106,10 +150,12 @@ function App() {
       'Status',
       'Stage',
       'Review priority',
+      'Implementation safeguards',
+      'Confidence',
+      'Last verified',
       'Source type',
       'Source title',
       'Source URL',
-      'Implementation safeguards',
       'Verification',
     ]
     const rows = countries.map((country) => [
@@ -117,10 +163,12 @@ function App() {
       statusLabels[country.status],
       country.stage,
       riskLabel[country.risk],
+      safeguardLabels[country.implementationSafeguards],
+      confidenceLabels[confidenceOf(country)],
+      country.lastVerified ?? sourceBaseline,
       country.sourceType,
       country.sourceTitle,
       country.sourceUrl ?? '',
-      safeguardLabels[country.implementationSafeguards],
       country.verification,
     ])
     const csv = [headers, ...rows]
@@ -192,21 +240,27 @@ function App() {
           <Metric label="Adopted" value={counts.adopted} total={27} tone="dark" />
           <Metric label="Draft / adopting" value={counts.draft} total={27} tone="coral" />
           <Metric label="Unclear" value={counts.unclear} total={27} tone="muted" />
-          <div className="progress-story">
-            <span>Status snapshot</span>
+          <div className="progress-story countdown">
+            <span>Countdown to application</span>
+            <div className="countdown-figure">
+              <strong>{daysToApplication}</strong>
+              <em>days</em>
+            </div>
             <div className="progress-track" aria-hidden="true">
               <i style={{ width: `${(counts.adopted / 27) * 100}%` }} />
               <b style={{ width: `${(counts.draft / 27) * 100}%` }} />
             </div>
             <small>
-              {counts.highRisk} high-priority records and {counts.sourceGaps} records
-              still need stronger national-source coverage.
+              EU Pact general application on 12 June 2026 — {counts.adopted} adopted,{' '}
+              {counts.draft} in progress, {counts.unclear} unclear.
             </small>
           </div>
         </div>
       </section>
 
-      <ImplementationAnalysis counts={counts} />
+      <ActivityStrip onSelect={setSelectedCode} />
+
+      <ImplementationAnalysis counts={counts} onSelect={setSelectedCode} />
 
       <section className="workbench" aria-label="PactWatch country workbench">
         <div className="filter-strip">
@@ -249,6 +303,7 @@ function App() {
                   key={country.code}
                   country={country}
                   selected={country.code === selected.code}
+                  recentlyUpdated={recentlyUpdatedCodes.has(country.code)}
                   onSelect={() => setSelectedCode(country.code)}
                 />
               ))}
@@ -264,6 +319,7 @@ function App() {
 
 function ImplementationAnalysis({
   counts,
+  onSelect,
 }: {
   counts: {
     adopted: number
@@ -271,98 +327,110 @@ function ImplementationAnalysis({
     unclear: number
     highRisk: number
     sourceGaps: number
+    assessed: number
   }
+  onSelect: (code: string) => void
 }) {
-  const advancedCountries = countries
-    .filter((country) => country.status === 'adopted')
-    .sort((a, b) => b.progress - a.progress)
-    .slice(0, 6)
-
-  const watchCountries = countries.filter(
-    (country) =>
-      country.status === 'unclear' ||
-      country.sourceType !== 'official national' ||
-      country.risk === 'high',
-  )
-
   return (
     <section className="analysis-panel" aria-label="Implementation analysis">
       <div className="analysis-heading">
         <p className="eyebrow">Implementation analysis</p>
-        <h2>Legal readiness remains uneven across Member States.</h2>
+        <h2>Adoption is moving — safeguard quality is mostly unverified.</h2>
         <p>
-          PactWatch currently records {counts.adopted} Member States as having
-          adopted most relevant national legislation, {counts.draft} still moving
-          through drafting or adoption, and {counts.unclear} where no definitive
-          public implementation status has been recovered.
+          PactWatch records {counts.adopted} Member States as having adopted most
+          relevant national legislation, {counts.draft} still drafting or adopting,
+          and {counts.unclear} with no definitive public status recovered. The two
+          questions are tracked separately: how far adoption has progressed, and
+          whether implementation safeguards hold up.
         </p>
       </div>
 
-      <div className="analysis-grid">
-        <article>
-          <span>Further advanced</span>
-          <h3>A small group has moved ahead on adoption.</h3>
-          <p>
-            Austria, the Netherlands, Estonia, Slovakia, Czechia and Ireland show
-            the clearest legislative progress. Germany, Cyprus and Lithuania are
-            also in the adopted group, but still need closer review before the
-            quality of implementation can be compared.
-          </p>
-          <div className="country-chip-line">
-            {advancedCountries.map((country) => (
-              <CountryChip key={country.code} country={country} />
-            ))}
+      <div className="readiness" role="table" aria-label="Adoption by safeguard signal">
+        <div className="readiness-corner" role="columnheader">
+          <span>Adoption →</span>
+          <span>Safeguard signal ↓</span>
+        </div>
+        {adoptionColumns.map((column) => (
+          <div className="readiness-colhead" role="columnheader" key={column.key}>
+            {column.label}
+            <i>{countries.filter((country) => country.status === column.key).length}</i>
           </div>
-        </article>
+        ))}
 
-        <article>
-          <span>Less advanced</span>
-          <h3>Several files remain unclear or thinly sourced.</h3>
-          <p>
-            Hungary, Malta, Poland and Slovenia remain unclear. Romania and Spain
-            still rely on regional references pending recovery of national
-            official sources. Bulgaria, Greece and Italy warrant close monitoring
-            because they remain in draft or adoption processes and are high
-            review-priority records.
-          </p>
-          <div className="country-chip-line">
-            {watchCountries.slice(0, 9).map((country) => (
-              <CountryChip key={country.code} country={country} />
-            ))}
-          </div>
-        </article>
+        {safeguardRows.map((row) => (
+          <Fragment key={row.key}>
+            <div className={`readiness-rowhead sig-${row.key}`} role="rowheader">
+              {row.label}
+            </div>
+            {adoptionColumns.map((column) => {
+              const cell = countries.filter(
+                (country) =>
+                  country.status === column.key &&
+                  country.implementationSafeguards === row.key,
+              )
+              return (
+                <div className="readiness-cell" role="cell" key={column.key}>
+                  {cell.map((country) => (
+                    <button
+                      type="button"
+                      key={country.code}
+                      className="readiness-flag"
+                      title={`${country.country} — ${row.label}`}
+                      onClick={() => onSelect(country.code)}
+                    >
+                      <FlagIcon country={country} size="small" />
+                    </button>
+                  ))}
+                </div>
+              )
+            })}
+          </Fragment>
+        ))}
+      </div>
 
-        <article>
-          <span>Implementation challenges</span>
-          <h3>Adoption does not settle implementation quality.</h3>
-          <p>
-            The recurring issues are final-text recovery, distinguishing primary
-            legislation from implementing rules, mapping institutional
-            responsibilities, and checking whether accelerated, border and
-            screening procedures include safeguards that can work in practice.
-          </p>
-          <ul>
-            <li>Source gaps in {counts.sourceGaps} records need immediate follow-up.</li>
-            <li>Draft packages need monitoring through final parliamentary adoption.</li>
-            <li>Adopted packages still need article-level safeguard extraction.</li>
-          </ul>
-        </article>
+      <p className="analysis-note">
+        Safeguard quality is assessed for only {counts.assessed} of 27 records so
+        far — most adopted and drafting files sit in “not yet assessed”.{' '}
+        {counts.sourceGaps} records rest on a regional reference or have no
+        recovered national source. Confidence below is derived from provenance,
+        independent of adoption stage.
+      </p>
+    </section>
+  )
+}
 
-        <article>
-          <span>Clearer models</span>
-          <h3>The most useful records are transparent and dated.</h3>
-          <p>
-            The most useful national sources publish dated parliamentary or
-            government records, identify the affected legal instruments, and make
-            the adoption stage clear. Those features make implementation easier
-            to check, compare and update.
-          </p>
-          <ul>
-            <li>Clear adoption or effective dates.</li>
-            <li>Direct links to bills, acts or parliamentary dossiers.</li>
-            <li>Traceable responsibilities across ministries and agencies.</li>
-          </ul>
-        </article>
+function ActivityStrip({ onSelect }: { onSelect: (code: string) => void }) {
+  return (
+    <section className="activity-panel" aria-label="Recent activity">
+      <div className="activity-head">
+        <p className="eyebrow">Recent activity</p>
+        <h2>
+          {recentChanges.length} updates in the last 30 days.
+        </h2>
+      </div>
+      <div className="activity-track">
+        {changelog.map((event) => {
+          const country = countryByCode.get(event.code)
+          if (!country) return null
+          return (
+            <button
+              type="button"
+              key={`${event.code}-${event.date}`}
+              className="activity-card"
+              onClick={() => onSelect(event.code)}
+            >
+              <span className="activity-meta">
+                <FlagIcon country={country} size="small" />
+                <span>{country.country}</span>
+                <time>{formatIsoDate(event.date)}</time>
+              </span>
+              <p>{event.summary}</p>
+              <span className={`activity-kind kind-${event.kind}`}>
+                {changeKindLabels[event.kind]}
+              </span>
+            </button>
+          )
+        })}
       </div>
     </section>
   )
@@ -392,10 +460,12 @@ function Metric({
 function CountryRow({
   country,
   selected,
+  recentlyUpdated,
   onSelect,
 }: {
   country: CountryRecord
   selected: boolean
+  recentlyUpdated: boolean
   onSelect: () => void
 }) {
   return (
@@ -407,21 +477,15 @@ function CountryRow({
     >
       <FlagIcon country={country} />
       <span className="country-main">
-        <strong>{country.country}</strong>
+        <strong>
+          {country.country}
+          {recentlyUpdated && <em className="row-new">Updated</em>}
+        </strong>
         <small>{country.stage}</small>
       </span>
       <span className={`status-dot status-${country.status}`} />
       <span className={`risk risk-${country.risk}`}>{riskLabel[country.risk]}</span>
     </button>
-  )
-}
-
-function CountryChip({ country }: { country: CountryRecord }) {
-  return (
-    <span className="country-chip">
-      <FlagIcon country={country} size="small" />
-      {country.country}
-    </span>
   )
 }
 
@@ -440,19 +504,32 @@ function CountryBrief({ country }: { country: CountryRecord }) {
               {statusLabels[country.status]}
             </span>
             <span className={`risk risk-${country.risk}`}>{riskLabel[country.risk]} priority</span>
+            <span className={`conf conf-${confidenceOf(country)}`}>
+              {confidenceLabels[confidenceOf(country)]}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="brief-progress">
-        <div>
-          <span>Review score</span>
-          <strong>{country.progress}%</strong>
+      <div className="brief-readout">
+        <div className="readout-grid">
+          <div>
+            <span>Adoption</span>
+            <strong>{statusLabels[country.status]}</strong>
+          </div>
+          <div>
+            <span>Safeguard signal</span>
+            <strong>{safeguardLabels[country.implementationSafeguards]}</strong>
+          </div>
+          <div>
+            <span>Confidence</span>
+            <strong>{confidenceLabels[confidenceOf(country)]}</strong>
+          </div>
         </div>
-        <div className="progress-track large" aria-hidden="true">
-          <i style={{ width: `${country.progress}%` }} />
-        </div>
-        <small>Indicative score based on status, source coverage and review priority.</small>
+        <small>
+          Last verified {country.lastVerified ?? sourceBaseline} · {riskLabel[country.risk]}{' '}
+          review priority
+        </small>
       </div>
 
       <section className="brief-section">

@@ -23,6 +23,7 @@ export type CountryRecord = {
   implementationSafeguards: SafeguardState
   sourceQuality: 'verified source' | 'needs review' | 'gap'
   progress: number
+  lastVerified?: string
   summary: string
   watchpoints: string[]
   sources: SourceRecord[]
@@ -31,6 +32,87 @@ export type CountryRecord = {
 
 export const commissionReport =
   'https://home-affairs.ec.europa.eu/document/download/8a0aa873-859c-48b4-9f14-29674238393a_en?filename=Communication_State%20of%20play%20on%20the%20implementation%20of%20the%20Pact%20on%20Migration%20and%20Asylum.pdf'
+
+// Dataset is hand-curated. `asOf` anchors all date maths so the countdown and
+// recency reads are deterministic and always consistent with the data shown,
+// rather than drifting with the visitor's clock.
+export const asOf = '2026-06-03'
+export const sourceBaseline = '28 May 2026'
+export const applicationDate = '2026-06-12' // EU Pact general application
+
+export type ChangeKind = 'status-change' | 'advance' | 'new-source' | 'flag'
+
+export type ChangeEvent = {
+  date: string // ISO, e.g. '2026-05-26'
+  code: string
+  summary: string
+  kind: ChangeKind
+}
+
+export const changeKindLabels: Record<ChangeKind, string> = {
+  'status-change': 'Status change',
+  advance: 'Advance',
+  'new-source': 'New source',
+  flag: 'Flagged',
+}
+
+// Newest first. Curated alongside the country records.
+export const changelog: ChangeEvent[] = [
+  {
+    date: '2026-05-26',
+    code: 'NL',
+    summary: 'Senate backed the asylum and migration package; the Netherlands moves into the adopted group.',
+    kind: 'status-change',
+  },
+  {
+    date: '2026-05-25',
+    code: 'LT',
+    summary: 'Amendments to the Law on the Legal Status of Aliens cleared and published.',
+    kind: 'advance',
+  },
+  {
+    date: '2026-05-20',
+    code: 'AT',
+    summary: 'National Council adopted the adaptation law.',
+    kind: 'status-change',
+  },
+  {
+    date: '2026-05-18',
+    code: 'EE',
+    summary: 'Riigikogu passed the Act on Granting International Protection to Aliens.',
+    kind: 'status-change',
+  },
+  {
+    date: '2026-05-18',
+    code: 'IT',
+    summary: 'Chamber dossier on implementing provisions updated; still pre-adoption.',
+    kind: 'new-source',
+  },
+  {
+    date: '2026-05-11',
+    code: 'GR',
+    summary: 'Implementation proposal opened for consultation — border procedures flagged for review.',
+    kind: 'flag',
+  },
+  {
+    date: '2026-05-07',
+    code: 'PT',
+    summary: 'Council of Ministers statement published; underlying legal instrument still to be linked.',
+    kind: 'new-source',
+  },
+  {
+    date: '2026-05-06',
+    code: 'SE',
+    summary: 'Government proposition on adapting Swedish law submitted to the Riksdag.',
+    kind: 'new-source',
+  },
+  {
+    date: '2026-04-30',
+    code: 'SK',
+    summary: 'New Act on International Protection confirmed to take effect on 12 June.',
+    kind: 'advance',
+  },
+]
 
 export const countries: CountryRecord[] = [
   {
@@ -707,4 +789,19 @@ export const statusLabels: Record<ImplementationStatus, string> = {
   adopted: 'Adopted',
   draft: 'Draft / adopting',
   unclear: 'Unclear',
+}
+
+export type Confidence = 'high' | 'medium' | 'low'
+
+// Confidence is derived from provenance, not stored — it tracks how well a
+// record is sourced, independent of how far adoption has progressed.
+export function confidenceOf(country: CountryRecord): Confidence {
+  if (country.sourceType !== 'official national') return 'low'
+  return country.sourceQuality === 'verified source' ? 'high' : 'medium'
+}
+
+export const confidenceLabels: Record<Confidence, string> = {
+  high: 'High confidence',
+  medium: 'Medium confidence',
+  low: 'Low confidence',
 }
