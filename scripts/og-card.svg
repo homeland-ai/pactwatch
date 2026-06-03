@@ -1,0 +1,57 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="88%" cy="6%" r="62%">
+      <stop offset="0%" stop-color="#e4604f" stop-opacity="0.20"/>
+      <stop offset="55%" stop-color="#e4604f" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#e4604f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- paper -->
+  <rect width="1200" height="630" fill="#faf8f4"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- concentric "radar" motif, top-right -->
+  <g fill="none" stroke="#0a0810" stroke-opacity="0.06">
+    <circle cx="1130" cy="-20" r="120"/>
+    <circle cx="1130" cy="-20" r="200"/>
+    <circle cx="1130" cy="-20" r="280"/>
+    <circle cx="1130" cy="-20" r="360"/>
+  </g>
+
+  <!-- brand mark -->
+  <g>
+    <rect x="80" y="66" width="78" height="78" fill="#0a0810"/>
+    <rect x="80" y="138" width="78" height="6" fill="#e4604f"/>
+    <text x="119" y="116" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700"
+          letter-spacing="2" fill="#ffffff" text-anchor="middle">PW</text>
+  </g>
+  <text x="1120" y="112" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="700"
+        fill="#756f78" text-anchor="end">by Homelands Advisory</text>
+
+  <!-- eyebrow -->
+  <g>
+    <rect x="80" y="212" width="34" height="3" fill="#e4604f"/>
+    <text x="128" y="221" font-family="Helvetica, Arial, sans-serif" font-size="21" font-weight="700"
+          letter-spacing="4" fill="#c5432f">EU PACT IMPLEMENTATION MONITOR</text>
+  </g>
+
+  <!-- headline -->
+  <text x="78" y="312" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700"
+        fill="#0a0810">Tracking national</text>
+  <text x="78" y="392" font-family="Georgia, 'Times New Roman', serif" font-size="74" font-weight="700"
+        font-style="italic" fill="#c5432f">Pact implementation.</text>
+
+  <!-- subtext -->
+  <text x="80" y="452" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#38343f">A live, country-by-country tracker of how all 27 EU Member States are</text>
+  <text x="80" y="488" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#38343f">writing the Pact into national law — linked to official sources.</text>
+
+  <!-- divider -->
+  <rect x="80" y="528" width="1040" height="1.5" fill="#e6e2db"/>
+
+  <!-- footer: stats + url -->
+  <text x="80" y="575" font-family="Helvetica, Arial, sans-serif" font-size="23" font-weight="700"
+        fill="#0a0810">9 adopted  ·  14 in progress  ·  4 unclear</text>
+  <text x="1120" y="575" font-family="Helvetica, Arial, sans-serif" font-size="23" font-weight="700"
+        fill="#c5432f" text-anchor="end">pactwatch.homelandsadvisory.com</text>
+</svg>
