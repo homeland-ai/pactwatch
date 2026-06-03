@@ -779,10 +779,10 @@ export const countries: CountryRecord[] = [
 ]
 
 export const safeguardLabels: Record<SafeguardState, string> = {
-  present: 'Safeguards identified',
-  partial: 'Partial signals',
-  gap: 'Visible implementation gap',
-  review: 'Needs policy review',
+  present: 'Text reviewed',
+  partial: 'Partial review',
+  gap: 'Review not possible yet',
+  review: 'Needs legal review',
 }
 
 export const statusLabels: Record<ImplementationStatus, string> = {

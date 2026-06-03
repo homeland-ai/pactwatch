@@ -30,7 +30,7 @@ const filters: { key: FilterKey; label: string }[] = [
   { key: 'draft', label: 'Draft / adopting' },
   { key: 'unclear', label: 'Unclear' },
   { key: 'highRisk', label: 'High priority' },
-  { key: 'safeguardGaps', label: 'Safeguard gaps' },
+  { key: 'safeguardGaps', label: 'Needs legal review' },
   { key: 'sourceGaps', label: 'Official source missing' },
 ]
 
@@ -98,11 +98,6 @@ function useCountUp(target: number, duration = 1100) {
   return value
 }
 
-const returnRegulationUrl =
-  'https://home-affairs.ec.europa.eu/news/commission-welcomes-political-agreement-return-regulation-2026-06-02_en'
-
-const jhaCouncilUrl = 'https://www.consilium.europa.eu/en/meetings/jha/2026/06/04-05/'
-
 function App() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all')
   const [query, setQuery] = useState('')
@@ -152,7 +147,7 @@ function App() {
       'Status',
       'Stage',
       'Review priority',
-      'Implementation safeguards',
+      'Legal review status',
       'Confidence',
       'Last verified',
       'Source type',
@@ -385,18 +380,6 @@ function ImplementationAnalysis({
         no recovered national source.
       </p>
 
-      <p className="analysis-note">
-        Current EU watch: negotiators reached political agreement on the{' '}
-        <a href={returnRegulationUrl} target="_blank" rel="noreferrer">
-          Return Regulation
-        </a>{' '}
-        on 1 June, and home affairs ministers are due to review Pact
-        implementation, including reformed Eurodac, at the{' '}
-        <a href={jhaCouncilUrl} target="_blank" rel="noreferrer">
-          4 June Justice and Home Affairs Council
-        </a>
-        .
-      </p>
     </section>
   )
 }
@@ -568,10 +551,10 @@ function CountryBrief({ country }: { country: CountryRecord }) {
       </section>
 
       <section className="brief-section">
-        <h3>Watchpoints to monitor</h3>
+        <h3>Follow-up questions</h3>
         <p className="watchpoints-note">
-          Open questions for follow-up — not findings that these safeguards are
-          absent.
+          Issues to check in the underlying legal text; not findings that these
+          safeguards are absent.
         </p>
         <ul className="watchpoints">
           {country.watchpoints.map((item) => (
