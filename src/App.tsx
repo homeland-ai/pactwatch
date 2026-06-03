@@ -98,6 +98,11 @@ function useCountUp(target: number, duration = 1100) {
   return value
 }
 
+const returnRegulationUrl =
+  'https://home-affairs.ec.europa.eu/news/commission-welcomes-political-agreement-return-regulation-2026-06-02_en'
+
+const jhaCouncilUrl = 'https://www.consilium.europa.eu/en/meetings/jha/2026/06/04-05/'
+
 function App() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all')
   const [query, setQuery] = useState('')
@@ -207,7 +212,7 @@ function App() {
         <nav className="topbar-actions" aria-label="Utility navigation">
           <span>
             <i className="live-dot" aria-hidden="true" />
-            Updated 28 May 2026
+            Checked 3 June 2026
           </span>
           <a href={commissionReport} target="_blank" rel="noreferrer">
             Commission report
@@ -336,7 +341,9 @@ function ImplementationAnalysis({
           PactWatch records {counts.adopted} Member States as having adopted most
           relevant national legislation, {counts.draft} still drafting or adopting,
           and {counts.unclear} with no definitive public status recovered. Every
-          record links back to the national source it is based on.
+          record links back to the national source it is based on. The national
+          split is unchanged after a 3 June source check; the main new movement
+          is at EU level.
         </p>
       </div>
 
@@ -376,6 +383,19 @@ function ImplementationAnalysis({
         missing. The per-country notes flag what to check, not what is lacking.{' '}
         {counts.sourceGaps} records currently rest on a regional reference or have
         no recovered national source.
+      </p>
+
+      <p className="analysis-note">
+        Current EU watch: negotiators reached political agreement on the{' '}
+        <a href={returnRegulationUrl} target="_blank" rel="noreferrer">
+          Return Regulation
+        </a>{' '}
+        on 1 June, and home affairs ministers are due to review Pact
+        implementation, including reformed Eurodac, at the{' '}
+        <a href={jhaCouncilUrl} target="_blank" rel="noreferrer">
+          4 June Justice and Home Affairs Council
+        </a>
+        .
       </p>
     </section>
   )
