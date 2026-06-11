@@ -55,10 +55,13 @@ const sourceTypeLabels: Record<CountryRecord['sourceType'], string> = {
 const countryByCode = new Map(countries.map((country) => [country.code, country]))
 const DAY_MS = 24 * 60 * 60 * 1000
 const asOfTime = new Date(asOf).getTime()
-
-const daysToApplication = Math.max(
-  0,
-  Math.ceil((new Date(applicationDate).getTime() - asOfTime) / DAY_MS),
+const [applicationYear, applicationMonth, applicationDayOfMonth] = applicationDate
+  .split('-')
+  .map(Number)
+const applicationDay = Date.UTC(
+  applicationYear,
+  applicationMonth - 1,
+  applicationDayOfMonth,
 )
 
 const recentChanges = changelog.filter(
@@ -66,8 +69,32 @@ const recentChanges = changelog.filter(
 )
 const recentlyUpdatedCodes = new Set(recentChanges.map((event) => event.code))
 
+function calendarDayInBrussels(date: Date) {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Brussels',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }).formatToParts(date)
+  const valueOf = (type: Intl.DateTimeFormatPartTypes) =>
+    Number(parts.find((part) => part.type === type)?.value)
+
+  return Date.UTC(valueOf('year'), valueOf('month') - 1, valueOf('day'))
+}
+
+function useApplicationCountdown() {
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(new Date()), 60_000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  return Math.round((applicationDay - calendarDayInBrussels(now)) / DAY_MS)
+}
+
 function formatIsoDate(iso: string) {
-  return new Date(iso).toLocaleDateString('en-GB', {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -102,6 +129,7 @@ function App() {
   const [activeFilter, setActiveFilter] = useState<FilterKey>('all')
   const [query, setQuery] = useState('')
   const [selectedCode, setSelectedCode] = useState('GR')
+  const daysToApplication = useApplicationCountdown()
 
   const filteredCountries = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -207,7 +235,7 @@ function App() {
         <nav className="topbar-actions" aria-label="Utility navigation">
           <span>
             <i className="live-dot" aria-hidden="true" />
-            Checked 3 June 2026
+            Country data checked {formatIsoDate(asOf)}
           </span>
           <a href={commissionReport} target="_blank" rel="noreferrer">
             Commission report
@@ -238,18 +266,37 @@ function App() {
           <Metric label="Draft / adopting" value={counts.draft} total={27} tone="coral" />
           <Metric label="Unclear" value={counts.unclear} total={27} tone="muted" />
           <div className="progress-story countdown">
-            <span>Countdown to application</span>
+            <span>{daysToApplication > 0 ? 'Countdown to application' : 'EU Pact application'}</span>
             <div className="countdown-figure">
-              <strong>{daysToApplication}</strong>
-              <em>days</em>
+              <strong>
+                {daysToApplication > 0
+                  ? daysToApplication
+                  : daysToApplication === 0
+                    ? 'Today'
+                    : 'Live'}
+              </strong>
+              <em>
+                {daysToApplication > 1
+                  ? 'days'
+                  : daysToApplication === 1
+                    ? 'day'
+                    : daysToApplication === 0
+                      ? 'starts'
+                      : 'since 12 June'}
+              </em>
             </div>
             <div className="progress-track" aria-hidden="true">
               <i style={{ width: `${(counts.adopted / 27) * 100}%` }} />
               <b style={{ width: `${(counts.draft / 27) * 100}%` }} />
             </div>
             <small>
-              EU Pact general application on 12 June 2026 — {counts.adopted} adopted,{' '}
-              {counts.draft} in progress, {counts.unclear} unclear.
+              {daysToApplication > 0
+                ? 'EU Pact general application begins on 12 June 2026'
+                : daysToApplication === 0
+                  ? 'EU Pact general application begins today, 12 June 2026'
+                  : 'The EU Pact has applied generally since 12 June 2026'}{' '}
+              — {counts.adopted} adopted, {counts.draft} in progress, {counts.unclear}{' '}
+              unclear.
             </small>
           </div>
         </div>

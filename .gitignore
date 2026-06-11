@@ -23,8 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local Netlify folder
+# Local deployment folders
 .netlify
+.vercel
 
 # Local verification artifacts
 verification-*.png

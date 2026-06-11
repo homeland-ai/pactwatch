@@ -33,9 +33,8 @@ export type CountryRecord = {
 export const commissionReport =
   'https://home-affairs.ec.europa.eu/document/download/8a0aa873-859c-48b4-9f14-29674238393a_en?filename=Communication_State%20of%20play%20on%20the%20implementation%20of%20the%20Pact%20on%20Migration%20and%20Asylum.pdf'
 
-// Dataset is hand-curated. `asOf` anchors all date maths so the countdown and
-// recency reads are deterministic and always consistent with the data shown,
-// rather than drifting with the visitor's clock.
+// Dataset is hand-curated. `asOf` anchors research recency and remains separate
+// from the live application countdown, which follows the date in Brussels.
 export const asOf = '2026-06-03'
 export const sourceBaseline = '28 May 2026'
 export const applicationDate = '2026-06-12' // EU Pact general application

@@ -17,10 +17,11 @@ and review priority are PactWatch analytical signals, not official EU
 classifications.
 
 **Confidence** is derived from provenance (official national vs. regional
-reference vs. not recovered) and is independent of adoption stage. Dates are
-computed against `asOf` in `src/data.ts` so the application countdown and
-"recent activity" reads stay consistent with the curated dataset; update `asOf`,
-the `changelog` and the country records together when refreshing.
+reference vs. not recovered) and is independent of adoption stage. Research
+recency is computed against `asOf` in `src/data.ts`; update `asOf`, the
+`changelog` and the country records together when refreshing. The application
+countdown uses the visitor's current date in Brussels and transitions to an
+in-application state after 12 June 2026.
 
 ## Development
 
@@ -31,4 +32,4 @@ npm run build
 npm run lint
 ```
 
-Netlify builds from `npm run build` and publishes `dist`.
+Vercel builds from `npm run build` and publishes `dist`.
